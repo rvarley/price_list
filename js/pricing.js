@@ -17,6 +17,8 @@ deleteStockButton.onclick = deleteStock;
 
 var products = [];
 
+window.onload = loadData;
+
 function addStock() {
     // Get all the checkboxes
     // var selected = document.querySelectorAll('tbody > tr > td > input:checkbox'); // not valid
@@ -31,6 +33,7 @@ function addStock() {
         var prodId = selected[i].parentNode.parentNode.id;
         products[prodId].inStock = true;
         }
+        saveData();
 }
 
 function addItem() {
@@ -45,6 +48,7 @@ function addItem() {
     console.log(newProd);
     console.log(products);
     displayInventory();
+    saveData();
 }
 
 // Delete selected rows from inventory
@@ -56,7 +60,7 @@ function getSelectedRowBoxes() {
     return selected;
 }
 
-function deleteStock() {
+function deleteStockold() {
     // determine selected rows
     selector = getSelectedRowBoxes();
     console.log('In deleteStock, selector', selector);
@@ -67,25 +71,20 @@ function deleteStock() {
         // delete products[i];
         }
     // re-render inventory list using display inventory
+    saveData();
     displayInventory();
 }
- 
-function removeStock() {
-    console.log("in removeStock");
-    // Get all the checkboxes
-    // var selected = document.querySelectorAll('tbody > tr > td > input:checkbox'); // not valid
-    var selected = getSelectedRowBoxes();
-    console.log('value of selected in selected is: ', selected);
-    for (var i = 0; i < selected.length; i++) {
-        var status = selected[i].parentNode.parentNode.lastChild;
-        status.textContent = "NO";
-        status.className = "false";
-        // Update the product in the products array that
-        // corresponds to the checked checkbox we're updateing.
-        var prodId = selected[i].parentNode.parentNode.id;
-        products[prodId].inStock = false;
-        }
 
+function deleteStock() {
+    rows = getSelectedRowBoxes();
+
+    for (var i=rows.length - 1; i >= 0; i--) {
+        var prodId = rows[i].parentNode.parentNode.id;
+        delete products[prodId];
+        products.splice(prodId, 1);
+    }
+    saveData();
+    displayInventory();
 
 }
 
@@ -128,7 +127,6 @@ function displayInventory(){
                 return "NO";
             }
         }(products[i].inStock));
-        // instock.className = products[i].inStock;
         inStock.setAttribute('class', products[i].inStock);
 
         // add all td's to the tr
@@ -153,4 +151,34 @@ function Product(name, price, inStock) {
     this.setStock = function(stock) {
         this.inStock = stock;
     };
+
+}
+
+/**
+ * Saves current state of the products array
+*/
+function saveData() {
+    // transform products array into json string
+    var productJSON = JSON.stringify(products);
+    console.log('the json string in saveData is ', productJSON);
+    
+    // save json string into local storage
+    // saves into price_list the string value in variable products
+    localStorage.setItem("price_list", productJSON);
+}
+
+/**
+ * Loads the current state of the product array
+*/
+function loadData() {
+    var productJSON = localStorage.getItem("price_list");
+    console.log("productJSON in loadData is ", productJSON);
+    // 
+    products = JSON.parse(productJSON);
+    console.log("loadData json products object", products);
+    if (!products) {
+        products = [];
+    }
+    // Update the page
+    displayInventory();
 }
