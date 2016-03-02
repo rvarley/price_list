@@ -33,7 +33,8 @@ function addStock() {
         var prodId = selected[i].parentNode.parentNode.id;
         products[prodId].inStock = true;
         }
-        saveData();
+    saveData();
+    displayInventory();
 }
 
 function addItem() {
@@ -47,8 +48,8 @@ function addItem() {
     products.push(newProd);
     console.log(newProd);
     console.log(products);
-    displayInventory();
     saveData();
+    displayInventory();
 }
 
 // Delete selected rows from inventory
@@ -60,21 +61,7 @@ function getSelectedRowBoxes() {
     return selected;
 }
 
-function deleteStockold() {
-    // determine selected rows
-    selector = getSelectedRowBoxes();
-    console.log('In deleteStock, selector', selector);
-    // delete the products that correspond to the selected rows from the products array
-    for (var i = 0; i < selector.length; i++) {
-        console.log('selector[i] in deleteStock is ', selector[i]);
-
-        // delete products[i];
-        }
-    // re-render inventory list using display inventory
-    saveData();
-    displayInventory();
-}
-
+// Deletes the stock from the products objects array
 function deleteStock() {
     rows = getSelectedRowBoxes();
 
@@ -85,7 +72,26 @@ function deleteStock() {
     }
     saveData();
     displayInventory();
-
+}
+ 
+// Remove the stock from inventory.  This doesn't remove it from the page.
+function removeStock() {
+    console.log("in removeStock");
+    // Get all the checkboxes
+    // var selected = document.querySelectorAll('tbody > tr > td > input:checkbox'); // not valid
+    var selected = getSelectedRowBoxes();
+    console.log('value of selected in selected is: ', selected);
+    for (var i = 0; i < selected.length; i++) {
+        var status = selected[i].parentNode.parentNode.lastChild;
+        status.textContent = "NO";
+        status.className = "false";
+        // Update the product in the products array that
+        // corresponds to the checked checkbox we're updateing.
+        var prodId = selected[i].parentNode.parentNode.id;
+        products[prodId].inStock = false;
+        }
+    saveData();
+    displayInventory();
 }
 
 function displayInventory(){
@@ -127,6 +133,7 @@ function displayInventory(){
                 return "NO";
             }
         }(products[i].inStock));
+        // instock.className = products[i].inStock;
         inStock.setAttribute('class', products[i].inStock);
 
         // add all td's to the tr
@@ -151,7 +158,6 @@ function Product(name, price, inStock) {
     this.setStock = function(stock) {
         this.inStock = stock;
     };
-
 }
 
 /**
@@ -173,7 +179,6 @@ function saveData() {
 function loadData() {
     var productJSON = localStorage.getItem("price_list");
     console.log("productJSON in loadData is ", productJSON);
-    // 
     products = JSON.parse(productJSON);
     console.log("loadData json products object", products);
     if (!products) {
