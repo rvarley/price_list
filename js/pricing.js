@@ -177,7 +177,7 @@ function saveData() {
  * Loads the current state of the product array
 */
 function loadData() {
-    // var productJSON = localStorage.getItem("price_list");
+    var productJSON = localStorage.getItem("price_list");
     // console.log("productJSON in loadData is ", productJSON);
     products = JSON.parse(productJSON);
     console.log("loadData json products object", products);
@@ -186,4 +186,12 @@ function loadData() {
     }
     // Update the page
     displayInventory();
+}
+
+/**
+ * Load the data from the json file on ther server with AJAX.
+ */
+function loadDataWithAJAX() {
+    console.log('In new loadDataWithAJAX function');
+
 }

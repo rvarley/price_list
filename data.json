@@ -1,0 +1,17 @@
+[
+  {
+    "prodName": "item 1",
+    "price": "1",
+    "inStock": false
+  },
+  {
+    "prodName": "new item 2",
+    "price": "2",
+    "inStock": false
+  },
+  {
+    "prodName": "pitbull",
+    "price": "10000000",
+    "inStock": true
+  }
+]
