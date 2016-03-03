@@ -17,7 +17,8 @@ deleteStockButton.onclick = deleteStock;
 
 var products = [];
 
-window.onload = loadData;
+// window.onload = loadData;
+window.onload = loadDataWithAJAX;
 
 function addStock() {
     // Get all the checkboxes
@@ -194,4 +195,18 @@ function loadData() {
 function loadDataWithAJAX() {
     console.log('In new loadDataWithAJAX function');
 
+    // Create a new XMLHttpRequest object
+    var request = new XMLHttpRequest();
+    
+    // Add the call info
+    request.open('GET', 'data.json', true);
+
+    // Setup the onload function
+    request.onload = function () {
+        if (request.status === 200) {
+            console.log(request.responseText);
+        }
+    };
+    // Send out the request
+    request.send();
 }
