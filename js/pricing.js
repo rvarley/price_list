@@ -177,8 +177,8 @@ function saveData() {
  * Loads the current state of the product array
 */
 function loadData() {
-    var productJSON = localStorage.getItem("price_list");
-    console.log("productJSON in loadData is ", productJSON);
+    // var productJSON = localStorage.getItem("price_list");
+    // console.log("productJSON in loadData is ", productJSON);
     products = JSON.parse(productJSON);
     console.log("loadData json products object", products);
     if (!products) {
